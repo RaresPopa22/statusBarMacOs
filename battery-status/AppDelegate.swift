@@ -30,21 +30,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if let bhealth = info[kIOPSBatteryHealthKey] as? String,
                 let btimer = info[kIOPSTimeToEmptyKey] as? Int,
                 let bproccur = info[kIOPSCurrentCapacityKey] as?  Int {
-                    if (menuItem1.title != "Battery health: \(bhealth)") {
-                        menuItem1.title = "Battery health: \(bhealth)"
+                    if (menuItem1.title != "Battery health is \(bhealth)") {
+                        menuItem1.title = "Battery health is \(bhealth)"
                     }
                     
-                    if (menuItem2.title != "Battery percentage: \(bproccur)%") {
-                        menuItem2.title = "Battery percentage: \(bproccur)%"
+                    if (menuItem2.title != "\(bproccur)% (Running on battery)") {
+                        menuItem2.title = "\(bproccur)% (Running on battery)"
                     }
 
                     if (btimer > 0) {
-                        button.title = "Time remaining: \((btimer % 3600)/60)h:\((btimer % 3600) % 60)m"
+                        button.title = "Time left: \((btimer % 3600)/60)h \((btimer % 3600) % 60)m"
                     } else if (btimer == 0) {
                         let timeLeftTillFullyCharged = info[kIOPSTimeToFullChargeKey]
-                        button.title = "Battery is charging. (Timer value: \(timeLeftTillFullyCharged!))"
+                        button.title = "Plugged In"
+                        menuItem2.title = "\(bproccur)% (Time left until full: \(timeLeftTillFullyCharged!))"
                     } else {
-                        button.title = "Calculating... (Timer value: \(btimer))"
+                        button.title = "Calculating..."
                     }
                 }
         }
@@ -74,9 +75,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         batteryPercentageItem.isEnabled = false
 
         // set the NSMenuItems for the statusBar
+        statusBarMenu.addItem(batteryPercentageItem)
         statusBarMenu.addItem(batteryHealthItem)
         statusBarMenu.addItem(NSMenuItem.separator())
-        statusBarMenu.addItem(batteryPercentageItem)
         statusBarMenu.addItem(quitItem)
         
         // create an Observable, that will emit events every 1000ms, that runs on the main thread
