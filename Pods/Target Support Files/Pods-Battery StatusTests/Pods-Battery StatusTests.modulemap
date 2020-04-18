@@ -1,0 +1,6 @@
+framework module Pods_Battery_StatusTests {
+  umbrella header "Pods-Battery StatusTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
